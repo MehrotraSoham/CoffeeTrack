@@ -115,6 +115,7 @@ npm run dev
 | Error | Cause | Fix |
 |-------|-------|-----|
 | `PrismaClientInitializationError` | `dev.db` missing | Run `npx prisma db push` |
+| `PrismaClientInitializationError` on Vercel | Vercel caches deps, skipping Prisma auto-generation | Add `prisma generate &&` before `next build` in the `build` script in `package.json` |
 | `useActionState is not a function` | `useActionState` is React 19+; project uses React 18 | Use `useFormState` / `useFormStatus` from `react-dom` instead |
 | Form field not saving to DB | Field added to Zod schema and DB write but not extracted from `formData` in `safeParse` | Pass `formData.get("fieldName")` into the `safeParse` object |
 | `Module not found` | Missing `"use client"` | Add directive to top of file |
