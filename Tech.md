@@ -79,9 +79,9 @@ npm run dev
 
 | Test | Command | Last Run | Result |
 |------|---------|----------|--------|
-| Type check | `npx tsc --noEmit` | | |
-| Lint | `npm run lint` | | |
-| Build | `npm run build` | | |
+| Type check | `npx tsc --noEmit` | 2026-03-24 | Pass |
+| Lint | `npm run lint` | 2026-03-24 | Pass — no warnings or errors |
+| Build | `npm run build` | 2026-03-24 | Pass — 8 static pages generated |
 
 ---
 
