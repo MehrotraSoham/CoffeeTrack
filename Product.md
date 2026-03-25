@@ -15,8 +15,8 @@ CoffeeTrack helps college students and MBAs stay on top of their networking by l
 | ID | Feature | Status | Priority |
 |----|---------|--------|----------|
 | P-001 | Log a coffee chat | Done | Must Have |
-| P-002 | Track follow-ups / reminders | Todo | Must Have |
-| P-003 | Dashboard & stats | Todo | Should Have |
+| P-002 | Track follow-ups / reminders | Done | Must Have |
+| P-003 | Dashboard & stats | Done | Should Have |
 
 > Status: Todo → Building → Done
 > Priority: Must Have / Should Have / Nice to Have

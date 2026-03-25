@@ -11,6 +11,7 @@ type ChatFormData = {
   role: string
   chatDate: string // YYYY-MM-DD
   notes: string
+  followUpDate?: string // YYYY-MM-DD
 }
 
 type Props = {
@@ -119,6 +120,19 @@ export default function ChatForm({ chat, isEdit }: Props) {
             defaultValue={chat?.notes}
             placeholder="What did you talk about?"
             className="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label htmlFor="followUpDate" className="text-sm font-medium text-gray-700">
+            Follow-up Date <span className="text-gray-400 font-normal">(optional)</span>
+          </label>
+          <input
+            id="followUpDate"
+            name="followUpDate"
+            type="date"
+            defaultValue={chat?.followUpDate}
+            className="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
           />
         </div>
 

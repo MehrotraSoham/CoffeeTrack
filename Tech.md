@@ -116,6 +116,7 @@ npm run dev
 |-------|-------|-----|
 | `PrismaClientInitializationError` | `dev.db` missing | Run `npx prisma db push` |
 | `useActionState is not a function` | `useActionState` is React 19+; project uses React 18 | Use `useFormState` / `useFormStatus` from `react-dom` instead |
+| Form field not saving to DB | Field added to Zod schema and DB write but not extracted from `formData` in `safeParse` | Pass `formData.get("fieldName")` into the `safeParse` object |
 | `Module not found` | Missing `"use client"` | Add directive to top of file |
 | Hydration mismatch | Server/client component boundary issue | Move state to a client component |
 | `ENOENT .env.local` | Env file missing | Copy `.env.example` to `.env.local` |

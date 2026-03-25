@@ -23,6 +23,9 @@ export default async function EditChatPage({ params }: Props) {
     role: chat.role,
     chatDate: chat.chatDate.toISOString().split("T")[0],
     notes: chat.notes,
+    followUpDate: chat.followUpDate
+      ? chat.followUpDate.toISOString().split("T")[0]
+      : undefined,
   }
 
   return (

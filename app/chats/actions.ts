@@ -11,6 +11,7 @@ const ChatSchema = z.object({
   role: z.string().min(1, "Role is required"),
   chatDate: z.string().min(1, "Date is required"),
   notes: z.string(),
+  followUpDate: z.string().optional(),
 })
 
 export async function createChat(_prevState: unknown, formData: FormData) {
@@ -20,13 +21,14 @@ export async function createChat(_prevState: unknown, formData: FormData) {
     role: formData.get("role"),
     chatDate: formData.get("chatDate"),
     notes: formData.get("notes") ?? "",
+    followUpDate: formData.get("followUpDate") || undefined,
   })
 
   if (!parsed.success) {
     return { error: parsed.error.issues[0].message }
   }
 
-  const { personName, company, role, chatDate, notes } = parsed.data
+  const { personName, company, role, chatDate, notes, followUpDate } = parsed.data
 
   await prisma.coffeeChat.create({
     data: {
@@ -35,6 +37,7 @@ export async function createChat(_prevState: unknown, formData: FormData) {
       role,
       chatDate: new Date(chatDate),
       notes,
+      followUpDate: followUpDate ? new Date(followUpDate) : null,
     },
   })
 
@@ -49,13 +52,14 @@ export async function updateChat(id: number, _prevState: unknown, formData: Form
     role: formData.get("role"),
     chatDate: formData.get("chatDate"),
     notes: formData.get("notes") ?? "",
+    followUpDate: formData.get("followUpDate") || undefined,
   })
 
   if (!parsed.success) {
     return { error: parsed.error.issues[0].message }
   }
 
-  const { personName, company, role, chatDate, notes } = parsed.data
+  const { personName, company, role, chatDate, notes, followUpDate } = parsed.data
 
   await prisma.coffeeChat.update({
     where: { id },
@@ -65,6 +69,7 @@ export async function updateChat(id: number, _prevState: unknown, formData: Form
       role,
       chatDate: new Date(chatDate),
       notes,
+      followUpDate: followUpDate ? new Date(followUpDate) : null,
     },
   })
 
