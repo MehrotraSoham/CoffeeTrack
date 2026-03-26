@@ -12,7 +12,7 @@
 | Language | TypeScript | 5.x |
 | Framework | Next.js (App Router) | 14 |
 | Styling | Tailwind CSS | 3.x |
-| Database | SQLite via Prisma | Prisma 5.x |
+| Database | Turso (hosted SQLite) via Prisma | Prisma 5.x |
 | Hosting | Vercel | — |
 | Package Manager | npm | — |
 
@@ -34,9 +34,8 @@ coffeetrack/
 ├── lib/
 │   └── db.ts               # Prisma client singleton
 ├── prisma/
-│   ├── schema.prisma       # Data models
-│   └── dev.db              # SQLite database (gitignored)
-├── .env.local              # Environment variables
+│   └── schema.prisma       # Data models (dev.db removed — DB lives on Turso)
+├── .env                    # Environment variables (gitignored)
 └── public/
 ```
 
@@ -45,12 +44,12 @@ coffeetrack/
 ## Setup
 
 ```bash
-git clone https://github.com/MehrotraSoham/CoffeeTrack.git 
+git clone https://github.com/MehrotraSoham/CoffeeTrack.git
 cd coffeetrack
 npm install
 cp .env.example .env.local
+# Add TURSO_DATABASE_URL and TURSO_AUTH_TOKEN to .env.local
 npx prisma generate
-npx prisma db push
 npm run dev
 ```
 
@@ -58,9 +57,10 @@ npm run dev
 
 ## Environment Variables
 
-| Variable | Purpose | Default |
-|----------|---------|---------|
-| `DATABASE_URL` | SQLite file path | `file:./prisma/dev.db` |
+| Variable | Purpose |
+|----------|---------|
+| `TURSO_DATABASE_URL` | Turso DB URL (`libsql://...`) |
+| `TURSO_AUTH_TOKEN` | Turso auth token |
 
 ---
 
@@ -121,6 +121,9 @@ npm run dev
 | `Module not found` | Missing `"use client"` | Add directive to top of file |
 | Hydration mismatch | Server/client component boundary issue | Move state to a client component |
 | `ENOENT .env.local` | Env file missing | Copy `.env.example` to `.env.local` |
+| `Unable to open the database file` on Vercel | Vercel has ephemeral filesystem; SQLite file can't persist | Migrate to Turso hosted SQLite |
+| `PrismaLibSQL is not a constructor` / `__webpack_require__.n is not a function` | webpack bundles `@libsql/client` and `@prisma/adapter-libsql` — `serverComponentsExternalPackages` doesn't cover all server code | Add `config.externals.push(...)` via `webpack` key in `next.config.mjs` |
+| Prisma adapter version mismatch | `@prisma/adapter-libsql` must match `@prisma/client` version exactly | Pin both to the same version (e.g. `5.22.0`) |
 
 ---
 
@@ -134,4 +137,6 @@ npm run dev
 | `tailwindcss` | Styling | 3.x |
 | `prisma` | ORM + migrations | 5.x |
 | `@prisma/client` | DB client | 5.x |
+| `@libsql/client` | Turso HTTP driver for Prisma | latest |
+| `@prisma/adapter-libsql` | Prisma adapter for libSQL | latest |
 | `zod` | Input validation | 3.x |

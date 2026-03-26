@@ -69,7 +69,7 @@ CoffeeTrack helps college students and MBAs stay on top of their networking by l
 | Framework | Next.js 14 (App Router) | Full-stack in one repo, fast to prototype |
 | Language | TypeScript | Catches errors early, better AI codegen |
 | Styling | Tailwind CSS | Utility-first, no context switching |
-| Database | SQLite via Prisma | Zero config locally, easy to migrate later |
+| Database | Turso (hosted SQLite) via Prisma | SQLite-compatible, works on Vercel's serverless environment |
 | Hosting | Vercel | Free tier, deploys on git push |
 | Auth | None (v1) | Single-user local app for now |
 
@@ -96,3 +96,4 @@ CoffeeTrack helps college students and MBAs stay on top of their networking by l
 | Date | Change |
 |------|--------|
 | 2026-03-23 | Product.md created |
+| 2026-03-25 | Migrated database from local SQLite to Turso for Vercel compatibility |
