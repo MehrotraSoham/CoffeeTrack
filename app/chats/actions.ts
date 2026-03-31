@@ -12,6 +12,29 @@ const ChatSchema = z.object({
   chatDate: z.string().min(1, "Date is required"),
   notes: z.string(),
   followUpDate: z.string().optional(),
+}).superRefine((data, ctx) => {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const chatDate = new Date(data.chatDate)
+
+  if (chatDate > today) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["chatDate"],
+      message: "Chat date cannot be in the future",
+    })
+  }
+
+  if (data.followUpDate) {
+    const followUpDate = new Date(data.followUpDate)
+    if (followUpDate <= chatDate) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["followUpDate"],
+        message: "Follow-up date must be after the chat date",
+      })
+    }
+  }
 })
 
 export async function createChat(_prevState: unknown, formData: FormData) {

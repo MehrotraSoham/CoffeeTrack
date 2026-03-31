@@ -61,7 +61,7 @@ export default function ChatForm({ chat, isEdit }: Props) {
             required
             defaultValue={chat?.personName}
             placeholder="Jane Smith"
-            className="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+            className="border border-gray-300 rounded px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
           />
         </div>
 
@@ -76,7 +76,7 @@ export default function ChatForm({ chat, isEdit }: Props) {
             required
             defaultValue={chat?.company}
             placeholder="Acme Corp"
-            className="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+            className="border border-gray-300 rounded px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
           />
         </div>
 
@@ -91,7 +91,7 @@ export default function ChatForm({ chat, isEdit }: Props) {
             required
             defaultValue={chat?.role}
             placeholder="Software Engineer"
-            className="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+            className="border border-gray-300 rounded px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
           />
         </div>
 
@@ -105,7 +105,7 @@ export default function ChatForm({ chat, isEdit }: Props) {
             type="date"
             required
             defaultValue={chat?.chatDate}
-            className="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+            className="border border-gray-300 rounded px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
           />
         </div>
 
@@ -119,7 +119,7 @@ export default function ChatForm({ chat, isEdit }: Props) {
             rows={4}
             defaultValue={chat?.notes}
             placeholder="What did you talk about?"
-            className="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"
+            className="border border-gray-300 rounded px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"
           />
         </div>
 
@@ -132,7 +132,7 @@ export default function ChatForm({ chat, isEdit }: Props) {
             name="followUpDate"
             type="date"
             defaultValue={chat?.followUpDate}
-            className="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+            className="border border-gray-300 rounded px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
           />
         </div>
 
