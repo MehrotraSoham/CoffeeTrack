@@ -88,11 +88,11 @@ npm run dev
 ## Deployment
 
 **Method:** Push to `main` → Vercel auto-deploys
-**URL:** [add after first deploy]
+**URL:** https://coffeetrackvercel.vercel.app/
 
 | Date | Version | Status | Notes |
 |------|---------|--------|-------|
-| | | | |
+| 2026-03-30 | v1.0 | Live | Initial deployment — all P-001, P-002, P-003 features complete |
 
 ---
 

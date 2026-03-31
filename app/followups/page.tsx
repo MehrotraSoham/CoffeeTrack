@@ -2,6 +2,8 @@ import { prisma } from "@/lib/db"
 import Link from "next/link"
 import { markFollowUpDone } from "./actions"
 
+export const dynamic = "force-dynamic"
+
 export default async function FollowUpsPage() {
   const today = new Date()
   today.setUTCHours(0, 0, 0, 0)
