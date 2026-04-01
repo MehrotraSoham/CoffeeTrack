@@ -1,6 +1,7 @@
 # Product — CoffeeTrack
 
-> What we're building and why. Discovery + Definition + Design in one file.
+> Discovery + Definition. What we're building, why, and the detailed requirements.
+> AI agents: read this BEFORE writing any code.
 
 ---
 
@@ -17,8 +18,9 @@ CoffeeTrack helps college students and MBAs stay on top of their networking by l
 | P-001 | Log a coffee chat | Done | Must Have |
 | P-002 | Track follow-ups / reminders | Done | Must Have |
 | P-003 | Dashboard & stats | Done | Should Have |
+| P-004 | Authentication (Clerk) | Building | Must Have |
 
-> Status: Todo → Building → Done
+> Status: Todo → Defining → Defined → Building → Done
 > Priority: Must Have / Should Have / Nice to Have
 
 ---
@@ -62,32 +64,52 @@ CoffeeTrack helps college students and MBAs stay on top of their networking by l
 
 ---
 
-## Design Decisions
+### P-004: Authentication (Clerk)
 
-| Decision | Choice | Why |
-|----------|--------|-----|
-| Framework | Next.js 14 (App Router) | Full-stack in one repo, fast to prototype |
-| Language | TypeScript | Catches errors early, better AI codegen |
-| Styling | Tailwind CSS | Utility-first, no context switching |
-| Database | Turso (hosted SQLite) via Prisma | SQLite-compatible, works on Vercel's serverless environment |
-| Hosting | Vercel | Free tier, deploys on git push |
-| Auth | None (v1) | Single-user local app for now |
+**Functional Requirements:**
+- [ ] **P-004-F01:** User can sign up via Clerk (email + social providers) → Acceptance: sign-up flow completes and creates a Clerk user
+- [ ] **P-004-F02:** User can sign in via Clerk → Acceptance: sign-in redirects to dashboard
+- [ ] **P-004-F03:** User can sign out → Acceptance: session cleared, redirected to sign-in
+- [ ] **P-004-F04:** All app routes are protected — unauthenticated users are redirected to sign-in → Acceptance: visiting `/chats`, `/followups`, `/` without a session redirects to Clerk sign-in
+- [ ] **P-004-F05:** Each user only sees their own CoffeeChat records → Acceptance: two accounts cannot see each other's data
+- [ ] **P-004-F06:** CoffeeChat model has a `userId` field scoped to the Clerk user ID → Acceptance: DB migration runs cleanly; existing rows handled
+
+**Non-functional Requirements:**
+- [ ] **P-004-N01:** Auth flow adds no more than one extra redirect to protected pages → Metric: single redirect to Clerk sign-in, then back
+
+**Edge Cases:**
+- Existing chats created before auth was added: need a migration strategy (set `userId` to a seed value or delete — decide before shipping)
+- What happens if Clerk is down: Clerk middleware will block access — acceptable for v2 scope
+
+**Out of Scope:** SSO / SAML, org-level permissions, custom auth UI (use Clerk hosted pages)
 
 ---
 
 ## Out of Scope
 
-- User accounts / multi-user support (v1 is single-user)
 - Mobile app (responsive web only)
 - Email or push notifications
 - LinkedIn or calendar integrations
 - Data export
+- SSO / SAML / org-level permissions
+
+---
+
+## Glossary
+
+| Term | Definition |
+|------|-----------|
+| Coffee chat | An informal 1:1 networking conversation, logged as a single record |
+| Follow-up | A scheduled reminder tied to a chat entry; can be marked done |
+| userId | The Clerk-issued user identifier used to scope all DB records per user |
 
 ---
 
 ## Related Files
 
-- **Tech.md** — Stack, setup, testing, deployment, and fix log. Read Product.md first, then Tech.md.
+- **Architecture.md** — Stack, components, interfaces, naming conventions.
+- **Resources.md** — Component registry, environments, dependencies.
+- **Project.md** — Sprint tasks, diagnostics, deployment, fix log.
 
 ---
 
@@ -97,3 +119,4 @@ CoffeeTrack helps college students and MBAs stay on top of their networking by l
 |------|--------|
 | 2026-03-23 | Product.md created |
 | 2026-03-25 | Migrated database from local SQLite to Turso for Vercel compatibility |
+| 2026-03-31 | Upgraded to Level 2 — split Design Decisions to Architecture.md; added P-004 Auth |

@@ -1,6 +1,6 @@
 # CLAUDE.md — CoffeeTrack
 
-You are working on CoffeeTrack, a Next.js 14 app that helps college students log coffee chats, track follow-ups, and view networking stats. This is a solo project at Level 1 of the 7D Framework — two files define the entire project.
+You are working on CoffeeTrack, a Next.js 14 app that helps college students log coffee chats, track follow-ups, and view networking stats. This is a solo project at Level 2 of the 7D Framework — four files define the entire project.
 
 ---
 
@@ -8,10 +8,12 @@ You are working on CoffeeTrack, a Next.js 14 app that helps college students log
 
 | File | What it contains | When to read it |
 |------|-----------------|-----------------|
-| `Product.md` | Vision, backlog (P-001–P-003), requirements, design decisions | Before building anything |
-| `Tech.md` | Stack, project structure, setup, conventions, fix log | Before writing code |
+| `Product.md` | Vision, backlog (P-001–P-004), requirements, acceptance criteria | Before building anything |
+| `Architecture.md` | Stack, components, interfaces, naming conventions, code standards | Before writing code |
+| `Resources.md` | Component registry, environments, dependencies, secrets | Before adding a package or creating a component |
+| `Project.md` | Sprint tasks, deployment log, test results, fix log | Before starting a task; after completing one |
 
-**Always read both files before starting any task.** They are the source of truth. Do not invent requirements, components, or conventions not defined there.
+**Always read all four files before starting any task.** They are the source of truth. Do not invent requirements, components, or conventions not defined there.
 
 ---
 
@@ -19,9 +21,10 @@ You are working on CoffeeTrack, a Next.js 14 app that helps college students log
 
 ### Before Building
 1. Read `Product.md` — understand what feature you're working on and its acceptance criteria
-2. Read `Tech.md` — confirm the stack, conventions, and project structure
-3. Check the Fix Log in `Tech.md` for known errors related to your task
-4. If anything is unclear, ask before coding
+2. Read `Architecture.md` — confirm the stack, component design, and conventions
+3. Read `Resources.md` — check the component registry before creating anything new
+4. Check the Fix Log in `Project.md` for known errors related to your task
+5. If anything is unclear, ask before coding
 
 ### While Building
 - Follow the project structure in `Tech.md` exactly — put files where they belong
@@ -34,7 +37,8 @@ You are working on CoffeeTrack, a Next.js 14 app that helps college students log
 - Run `npx tsc --noEmit` — fix all type errors before considering a task done
 - Run `npm run lint` — fix all lint errors
 - Update the Status column in `Product.md` backlog if a feature is complete
-- If you hit an error that took more than one attempt to fix, log it in the Fix Log in `Tech.md`
+- Log the task in the Development Log in `Project.md`
+- If you hit an error that took more than one attempt to fix, log it in the Fix Log in `Project.md`
 
 ---
 
@@ -42,13 +46,15 @@ You are working on CoffeeTrack, a Next.js 14 app that helps college students log
 
 **"Should I add auth?"** — No. Auth is explicitly out of scope for v1. See Product.md Out of Scope.
 
-**"What database should I use for this?"** — SQLite via Prisma. See Tech.md Stack.
+**"What database should I use for this?"** — SQLite via Prisma (Turso hosted). See Architecture.md Stack.
 
-**"Should I create a new component or inline the UI?"** — Create a component in `components/` if it's used in more than one place or is more than ~30 lines.
+**"Should I create a new component or inline the UI?"** — Create a component in `components/` if it's used in more than one place or is more than ~30 lines. Register it in Resources.md Component Registry.
 
 **"The design doesn't cover this edge case — what do I do?"** — Stop and ask. Don't invent behavior for uncovered cases.
 
-**"Should I use the pages/ router or app/ router?"** — App Router only. See Tech.md Conventions.
+**"Should I use the pages/ router or app/ router?"** — App Router only. See Architecture.md.
+
+**"Is this component already built?"** — Check Resources.md Component Registry before creating anything new.
 
 ---
 
@@ -72,4 +78,5 @@ As the project evolves, keep this file current:
 - Add new conventions when you establish a pattern worth repeating
 - Add new Don'ts when you catch a recurring mistake
 - Update the File map if new files are added
-- Seed the Fix Log in `Tech.md` with any new recurring errors
+- Seed the Fix Log in `Project.md` with any new recurring errors
+- Update Resources.md Component Registry when new components are added
