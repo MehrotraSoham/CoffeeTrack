@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db"
 import { z } from "zod"
 import { redirect } from "next/navigation"
 import { revalidatePath } from "next/cache"
+import { auth } from "@clerk/nextjs/server"
 
 const ChatSchema = z.object({
   personName: z.string().min(1, "Name is required"),
@@ -38,6 +39,9 @@ const ChatSchema = z.object({
 })
 
 export async function createChat(_prevState: unknown, formData: FormData) {
+  const { userId } = auth()
+  if (!userId) return { error: "Unauthorized" }
+
   const parsed = ChatSchema.safeParse({
     personName: formData.get("personName"),
     company: formData.get("company"),
@@ -55,6 +59,7 @@ export async function createChat(_prevState: unknown, formData: FormData) {
 
   await prisma.coffeeChat.create({
     data: {
+      userId,
       personName,
       company,
       role,
@@ -69,6 +74,9 @@ export async function createChat(_prevState: unknown, formData: FormData) {
 }
 
 export async function updateChat(id: number, _prevState: unknown, formData: FormData) {
+  const { userId } = auth()
+  if (!userId) return { error: "Unauthorized" }
+
   const parsed = ChatSchema.safeParse({
     personName: formData.get("personName"),
     company: formData.get("company"),
@@ -85,7 +93,7 @@ export async function updateChat(id: number, _prevState: unknown, formData: Form
   const { personName, company, role, chatDate, notes, followUpDate } = parsed.data
 
   await prisma.coffeeChat.update({
-    where: { id },
+    where: { id, userId },
     data: {
       personName,
       company,
@@ -102,7 +110,9 @@ export async function updateChat(id: number, _prevState: unknown, formData: Form
 }
 
 export async function deleteChat(id: number) {
-  await prisma.coffeeChat.delete({ where: { id } })
+  const { userId } = auth()
+  if (!userId) throw new Error("Unauthorized")
+  await prisma.coffeeChat.delete({ where: { id, userId } })
   revalidatePath("/chats")
   redirect("/chats")
 }

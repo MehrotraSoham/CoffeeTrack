@@ -1,15 +1,18 @@
 import { prisma } from "@/lib/db"
 import Link from "next/link"
 import { markFollowUpDone } from "./actions"
+import { auth } from "@clerk/nextjs/server"
 
 export const dynamic = "force-dynamic"
 
 export default async function FollowUpsPage() {
+  const { userId } = auth()
   const today = new Date()
   today.setUTCHours(0, 0, 0, 0)
 
   const followUps = await prisma.coffeeChat.findMany({
     where: {
+      userId: userId!,
       followUpDate: { not: null },
       followUpDone: false,
     },

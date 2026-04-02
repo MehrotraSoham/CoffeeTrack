@@ -43,8 +43,8 @@
 
 | Name | URL | Purpose | Config |
 |------|-----|---------|--------|
-| Local | `http://localhost:3000` | Development | `.env.local` |
-| Production | `https://coffeetrackvercel.vercel.app` | Live | Vercel environment variables |
+| Local | `http://localhost:3000` | Development | `.env.local` — points to `coffeetrack-dev` Turso DB |
+| Production | `https://coffeetrackvercel.vercel.app` | Live | Vercel environment variables — points to `coffeetrack` Turso DB |
 
 ---
 
@@ -53,7 +53,8 @@
 | Service | Provider | Purpose | Cost |
 |---------|----------|---------|------|
 | App Hosting | Vercel | Auto-deploy on push to `main` | Free tier |
-| Database | Turso | Hosted SQLite (libsql) | Free tier |
+| Database (prod) | Turso | `coffeetrack` — production hosted SQLite | Free tier |
+| Database (dev) | Turso | `coffeetrack-dev` — local development SQLite | Free tier |
 | Auth | Clerk | Sign-up, sign-in, session management | Free tier (up to 10k MAU) |
 
 ---
@@ -79,7 +80,7 @@
 
 | Secret | Stored In | Used By |
 |--------|-----------|---------|
-| `TURSO_DATABASE_URL` | Vercel env vars + `.env.local` | Prisma client |
-| `TURSO_AUTH_TOKEN` | Vercel env vars + `.env.local` | Prisma client |
+| `TURSO_DATABASE_URL` | Vercel env vars (prod DB) + `.env.local` (dev DB) | Prisma client |
+| `TURSO_AUTH_TOKEN` | Vercel env vars (prod token) + `.env.local` (dev token) | Prisma client |
 | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Vercel env vars + `.env.local` | Clerk frontend (P-004) |
 | `CLERK_SECRET_KEY` | Vercel env vars + `.env.local` | Clerk server-side (P-004) |

@@ -1,10 +1,13 @@
 import { prisma } from "@/lib/db"
 import Link from "next/link"
+import { auth } from "@clerk/nextjs/server"
 
 export const dynamic = "force-dynamic"
 
 export default async function ChatsPage() {
+  const { userId } = auth()
   const chats = await prisma.coffeeChat.findMany({
+    where: { userId: userId! },
     orderBy: { chatDate: "desc" },
   })
 

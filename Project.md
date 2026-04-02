@@ -44,11 +44,11 @@
 
 | Task | Owner | Product ID | Branch | Status | Notes |
 |------|-------|------------|--------|--------|-------|
-| Install and configure Clerk | Soham | P-004-F01 | `feat/auth-clerk` | Todo | |
-| Wrap layout with ClerkProvider + add sign-in/sign-out UI | Soham | P-004-F03 | `feat/auth-clerk` | Todo | |
-| Add `middleware.ts` for route protection | Soham | P-004-F04 | `feat/auth-clerk` | Todo | |
-| Add `userId` to CoffeeChat model + DB migration | Soham | P-004-F06 | `feat/auth-clerk` | Todo | |
-| Scope all server actions and queries by `userId` | Soham | P-004-F05 | `feat/auth-clerk` | Todo | |
+| Install and configure Clerk | Soham | P-004-F01 | `feat/auth-clerk` | Done | Pinned to @clerk/nextjs@5 (Next.js 14 compat) |
+| Wrap layout with ClerkProvider + add sign-in/sign-out UI | Soham | P-004-F03 | `feat/auth-clerk` | Done | |
+| Add `middleware.ts` for route protection | Soham | P-004-F04 | `feat/auth-clerk` | Done | |
+| Add `userId` to CoffeeChat model + DB migration | Soham | P-004-F06 | `feat/auth-clerk` | Done | Schema updated; run `prisma db push` on dev DB after clearing rows |
+| Scope all server actions and queries by `userId` | Soham | P-004-F05 | `feat/auth-clerk` | Done | |
 | Add Clerk env vars to Vercel | Soham | — | — | Todo | NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY + CLERK_SECRET_KEY |
 | Pre-deploy checks (tsc, lint, build) | Soham | — | — | Todo | |
 | Deploy v2.0 | Soham | — | — | Todo | |
@@ -73,6 +73,8 @@
 | 2026-03-25 | DB migrated from local SQLite to Turso | `lib/db.ts`, `prisma/schema.prisma` | Needed for Vercel |
 | 2026-03-30 | v1.0 deployed to Vercel | — | All P-001–P-003 live |
 | 2026-03-31 | Upgraded framework to Level 2 | `Architecture.md`, `Resources.md`, `Project.md` | |
+| 2026-04-01 | Decided two-DB strategy (dev/prod split) + migration strategy (delete existing rows) | `Architecture.md`, `Resources.md`, `Product.md` | |
+| 2026-04-01 | Sprint 2 auth implementation (P-004-F01–F06) | `middleware.ts`, `app/layout.tsx`, `app/**/page.tsx`, `app/**/actions.ts`, `prisma/schema.prisma` | |
 
 ---
 
@@ -137,3 +139,4 @@
 | `Unable to open the database file` on Vercel | Vercel has ephemeral filesystem | Migrate to Turso hosted SQLite |
 | `PrismaLibSQL is not a constructor` | webpack bundles `@libsql/client` incorrectly | Add `config.externals.push(...)` via `webpack` key in `next.config.mjs` |
 | Prisma adapter version mismatch | `@prisma/adapter-libsql` must match `@prisma/client` exactly | Pin both to same version (e.g. `5.22.0`) |
+| `@clerk/nextjs` peer dep error on install | Latest Clerk requires Next.js 15+; project is on Next.js 14 | Install `@clerk/nextjs@5` explicitly |
