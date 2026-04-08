@@ -1,9 +1,11 @@
 import { prisma } from "@/lib/db"
 import Link from "next/link"
+import { auth } from "@clerk/nextjs/server"
 
 export const dynamic = "force-dynamic"
 
 export default async function DashboardPage() {
+  const { userId } = auth()
   const now = new Date()
 
   // Last 6 months (including current month)
@@ -11,16 +13,16 @@ export default async function DashboardPage() {
 
   const [totalChats, recentChats, pendingFollowUps, doneFollowUps] =
     await Promise.all([
-      prisma.coffeeChat.count(),
+      prisma.coffeeChat.count({ where: { userId: userId! } }),
       prisma.coffeeChat.findMany({
-        where: { chatDate: { gte: sixMonthsAgo } },
+        where: { userId: userId!, chatDate: { gte: sixMonthsAgo } },
         select: { chatDate: true },
       }),
       prisma.coffeeChat.count({
-        where: { followUpDate: { not: null }, followUpDone: false },
+        where: { userId: userId!, followUpDate: { not: null }, followUpDone: false },
       }),
       prisma.coffeeChat.count({
-        where: { followUpDate: { not: null }, followUpDone: true },
+        where: { userId: userId!, followUpDate: { not: null }, followUpDone: true },
       }),
     ])
 

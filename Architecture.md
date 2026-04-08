@@ -149,6 +149,8 @@ Overdue = `followUpDate < today && followUpDone == false`.
 | 2026-03-23 | Database | PostgreSQL, SQLite local, Turso | Turso hosted SQLite | SQLite-compatible + works on Vercel serverless |
 | 2026-03-23 | Styling | CSS Modules, styled-components, Tailwind | Tailwind CSS | Utility-first, no context switching |
 | 2026-03-31 | Auth | NextAuth, Auth.js, Clerk, Supabase Auth | Clerk | Hosted, Next.js 14 App Router native, no session management, free tier |
+| 2026-04-01 | DB environments | Single Turso DB for all environments | Two Turso DBs (`coffeetrack` prod, `coffeetrack-dev` local) | Prevents local dev/migrations from affecting production data |
+| 2026-04-01 | Pre-auth data migration | Seed userId, keep rows, or delete | Delete all existing rows when adding `userId` | Solo project with no real users; simpler than a backfill |
 
 ---
 

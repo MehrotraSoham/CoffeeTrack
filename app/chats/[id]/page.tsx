@@ -2,17 +2,19 @@ import { prisma } from "@/lib/db"
 import ChatForm from "@/components/ChatForm"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { auth } from "@clerk/nextjs/server"
 
 type Props = {
   params: { id: string }
 }
 
 export default async function EditChatPage({ params }: Props) {
+  const { userId } = auth()
   const id = parseInt(params.id, 10)
 
   if (isNaN(id)) notFound()
 
-  const chat = await prisma.coffeeChat.findUnique({ where: { id } })
+  const chat = await prisma.coffeeChat.findUnique({ where: { id, userId: userId! } })
 
   if (!chat) notFound()
 

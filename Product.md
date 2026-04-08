@@ -78,7 +78,7 @@ CoffeeTrack helps college students and MBAs stay on top of their networking by l
 - [ ] **P-004-N01:** Auth flow adds no more than one extra redirect to protected pages → Metric: single redirect to Clerk sign-in, then back
 
 **Edge Cases:**
-- Existing chats created before auth was added: need a migration strategy (set `userId` to a seed value or delete — decide before shipping)
+- Existing chats created before auth was added: **delete all existing rows** when the `userId` migration runs — solo project with no real users, backfill not needed
 - What happens if Clerk is down: Clerk middleware will block access — acceptable for v2 scope
 
 **Out of Scope:** SSO / SAML, org-level permissions, custom auth UI (use Clerk hosted pages)
