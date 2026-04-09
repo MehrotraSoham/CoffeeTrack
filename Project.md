@@ -49,11 +49,38 @@
 | Add `middleware.ts` for route protection | Soham | P-004-F04 | `feat/auth-clerk` | Done | |
 | Add `userId` to CoffeeChat model + DB migration | Soham | P-004-F06 | `feat/auth-clerk` | Done | Schema updated; run `prisma db push` on dev DB after clearing rows |
 | Scope all server actions and queries by `userId` | Soham | P-004-F05 | `feat/auth-clerk` | Done | |
-| Add Clerk env vars to Vercel | Soham | — | — | Todo | NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY + CLERK_SECRET_KEY |
-| Pre-deploy checks (tsc, lint, build) | Soham | — | — | Todo | |
-| Deploy v2.0 | Soham | — | — | Todo | |
+| Add Clerk env vars to Vercel | Soham | — | — | Done | NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY + CLERK_SECRET_KEY |
+| Pre-deploy checks (tsc, lint, build) | Soham | — | — | Done | |
+| Deploy v2.0 | Soham | — | — | Done | |
 
 ### Sprint 2 Review
+
+- **Completed:** 8/8
+- **Carried over:** None
+- **What went well:** Full auth implementation shipped; two-DB strategy (dev/prod split) kept prod clean during development
+- **What didn't:** —
+- **Changes for next sprint:** —
+
+---
+
+## Sprint 3 — AI Chat Analysis
+
+**Dates:** 2026-04-07 → 2026-04-21
+
+| Task | Owner | Product ID | Branch | Status | Notes |
+|------|-------|------------|--------|--------|-------|
+| Add `transcript` + `aiAnalysis` fields to Prisma schema + migrate dev DB | Soham | P-005-F03 | `feat/ai-analysis` | Done | Used Turso CLI directly — `prisma db push` doesn't work with libsql URL |
+| Install AI SDK | Soham | P-005 | `feat/ai-analysis` | Done | Switched from `@google/generative-ai` to `groq-sdk` — see Fix Log |
+| Build `lib/gemini.ts` — Groq client + `analyzeTranscript()` | Soham | P-005-F02 | `feat/ai-analysis` | Done | Returns typed `ChatAnalysis` object |
+| Add `uploadTranscript` server action to `app/chats/actions.ts` | Soham | P-005-F01/F02/F03 | `feat/ai-analysis` | Done | |
+| Build `TranscriptUpload` component | Soham | P-005-F01 | `feat/ai-analysis` | Done | `.txt` only, client component |
+| Build `AnalysisDisplay` component | Soham | P-005-F04/F05 | `feat/ai-analysis` | Done | Hidden if no analysis; renders all 7 fields |
+| Wire both components into Chat Detail page | Soham | P-005-F04/F06 | `feat/ai-analysis` | Done | |
+| Add `GROQ_API_KEY` to Vercel env vars | Soham | — | — | Todo | |
+| Pre-deploy checks (tsc, lint, build) + migrate prod Turso DB | Soham | — | — | Todo | Prod DB needs `transcript` + `aiAnalysis` columns |
+| Deploy v2.1 | Soham | — | — | Todo | |
+
+### Sprint 3 Review
 
 - **Completed:** —
 - **Carried over:** —
@@ -75,6 +102,7 @@
 | 2026-03-31 | Upgraded framework to Level 2 | `Architecture.md`, `Resources.md`, `Project.md` | |
 | 2026-04-01 | Decided two-DB strategy (dev/prod split) + migration strategy (delete existing rows) | `Architecture.md`, `Resources.md`, `Product.md` | |
 | 2026-04-01 | Sprint 2 auth implementation (P-004-F01–F06) | `middleware.ts`, `app/layout.tsx`, `app/**/page.tsx`, `app/**/actions.ts`, `prisma/schema.prisma` | |
+| 2026-04-07 | Scoped Sprint 3 — P-005 AI Chat Analysis via Gemini Flash | `Product.md`, `Architecture.md`, `Resources.md`, `Project.md` | |
 
 ---
 
@@ -82,9 +110,9 @@
 
 | Check | Command | Last Result | Date |
 |-------|---------|-------------|------|
-| Type check | `npx tsc --noEmit` | Pass | 2026-03-24 |
-| Lint | `npm run lint` | Pass | 2026-03-24 |
-| Build | `npm run build` | Pass | 2026-03-24 |
+| Type check | `npx tsc --noEmit` | Pass | 2026-04-07 |
+| Lint | `npm run lint` | Pass | 2026-04-07 |
+| Build | `npm run build` | Pass | 2026-04-07 |
 
 ---
 
@@ -98,8 +126,8 @@
 | P-002 | Overdue highlighting | Manual | Pass |
 | P-002 | Mark done | Manual | Pass |
 | P-003 | Dashboard stats | Manual | Pass |
-| P-004 | Route protection | — | Todo |
-| P-004 | userId scoping | — | Todo |
+| P-004 | Route protection | Manual | Pass |
+| P-004 | userId scoping | Manual | Pass |
 
 ---
 
@@ -108,6 +136,7 @@
 | Date | Version | Environment | Status | Notes |
 |------|---------|-------------|--------|-------|
 | 2026-03-30 | v1.0 | Production | Live | Initial deployment — all P-001, P-002, P-003 complete |
+| 2026-04-07 | v2.0 | Production | Live | Auth via Clerk (P-004) — all routes protected, userId scoping live |
 
 ---
 
@@ -130,6 +159,8 @@
 | Error | Cause | Fix |
 |-------|-------|-----|
 | `PrismaClientInitializationError` | `dev.db` missing | Run `npx prisma db push` |
+| Gemini API `limit: 0` on free tier | AI Studio key tied to a Cloud project without free tier billing | Switch to Groq (`groq-sdk`) — genuinely free, no billing required |
+| Groq JSON mode echoes transcript before JSON | Llama 3.3 on Groq doesn't cleanly enforce `response_format: json_object` | Remove `response_format`, extract JSON from response with `text.match(/\{[\s\S]*\}/)` |
 | `PrismaClientInitializationError` on Vercel | Vercel caches deps, skipping Prisma generation | Add `prisma generate &&` before `next build` in `package.json` build script |
 | `useActionState is not a function` | `useActionState` is React 19+; project uses React 18 | Use `useFormState` / `useFormStatus` from `react-dom` |
 | Form field not saving to DB | Field added to Zod schema and DB write but not extracted from `formData` | Pass `formData.get("fieldName")` into `safeParse` object |

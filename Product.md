@@ -18,7 +18,8 @@ CoffeeTrack helps college students and MBAs stay on top of their networking by l
 | P-001 | Log a coffee chat | Done | Must Have |
 | P-002 | Track follow-ups / reminders | Done | Must Have |
 | P-003 | Dashboard & stats | Done | Should Have |
-| P-004 | Authentication (Clerk) | Building | Must Have |
+| P-004 | Authentication (Clerk) | Done | Must Have |
+| P-005 | AI Chat Analysis | Defined | Must Have |
 
 > Status: Todo → Defining → Defined → Building → Done
 > Priority: Must Have / Should Have / Nice to Have
@@ -85,6 +86,29 @@ CoffeeTrack helps college students and MBAs stay on top of their networking by l
 
 ---
 
+### P-005: AI Chat Analysis
+
+**Functional Requirements:**
+- [ ] **P-005-F01:** User can upload a `.txt` transcript on the Chat Detail page → Acceptance: file input accepts `.txt` only; non-text files are rejected with an error
+- [ ] **P-005-F02:** Server sends transcript to Gemini Flash API and returns structured analysis → Acceptance: analysis returned within 15 seconds
+- [ ] **P-005-F03:** Analysis is stored on the CoffeeChat record → Acceptance: refreshing the page shows the same analysis without re-calling the API
+- [ ] **P-005-F04:** Analysis is displayed on Chat Detail page with: overall assessment, conversation balance, question quality, whether a clear next step was established, key learnings about the person, 2–3 coaching tips, and a drafted follow-up message → Acceptance: all seven fields present in the UI
+- [ ] **P-005-F05:** If no analysis exists, the analysis section is hidden — not shown as empty → Acceptance: new chats show no analysis section until a transcript is uploaded
+- [ ] **P-005-F06:** User can re-analyze by uploading a new transcript → Acceptance: new analysis overwrites the old one
+
+**Non-functional Requirements:**
+- [ ] **P-005-N01:** Gemini Flash free tier — zero cost to user or developer at current scale
+- [ ] **P-005-N02:** If Gemini API fails, show an error message — do not crash the page
+
+**Edge Cases:**
+- Transcript under 100 words: reject with "Transcript too short to analyze"
+- Gemini returns malformed JSON: show generic error, log to console
+- User not signed in: server action already protected by Clerk middleware
+
+**Out of Scope:** Voice recording, PDF/DOCX transcripts (`.txt` only in v1), real-time in-call analysis
+
+---
+
 ## Out of Scope
 
 - Mobile app (responsive web only)
@@ -120,3 +144,4 @@ CoffeeTrack helps college students and MBAs stay on top of their networking by l
 | 2026-03-23 | Product.md created |
 | 2026-03-25 | Migrated database from local SQLite to Turso for Vercel compatibility |
 | 2026-03-31 | Upgraded to Level 2 — split Design Decisions to Architecture.md; added P-004 Auth |
+| 2026-04-07 | Added P-005 AI Chat Analysis — Gemini Flash, transcript upload, structured analysis stored as JSON |

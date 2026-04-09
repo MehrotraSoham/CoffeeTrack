@@ -18,6 +18,8 @@ model CoffeeChat {
   notes        String    @default("")
   followUpDate DateTime?
   followUpDone Boolean   @default(false)
+  transcript   String?
+  aiAnalysis   String?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 }
