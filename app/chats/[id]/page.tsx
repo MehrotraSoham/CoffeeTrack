@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/db"
 import ChatForm from "@/components/ChatForm"
+import TranscriptUpload from "@/components/TranscriptUpload"
+import AnalysisDisplay from "@/components/AnalysisDisplay"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { auth } from "@clerk/nextjs/server"
@@ -42,6 +44,11 @@ export default async function EditChatPage({ params }: Props) {
         </p>
       </div>
       <ChatForm chat={chatData} isEdit={true} />
+
+      <div className="mt-10 pt-8 border-t border-gray-200 flex flex-col gap-6">
+        <TranscriptUpload chatId={chat.id} />
+        {chat.aiAnalysis && <AnalysisDisplay aiAnalysis={chat.aiAnalysis} />}
+      </div>
     </div>
   )
 }

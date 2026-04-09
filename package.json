@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^5.7.5",
+    "@google/generative-ai": "^0.24.1",
     "@libsql/client": "^0.8.0",
     "@prisma/adapter-libsql": "^5.22.0",
     "@prisma/client": "^5.22.0",
     "dotenv": "^17.3.1",
+    "groq-sdk": "^1.1.2",
     "next": "14.2.35",
     "prisma": "^5.22.0",
     "react": "^18",

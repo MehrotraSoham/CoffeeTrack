@@ -24,7 +24,8 @@ You are working on CoffeeTrack, a Next.js 14 app that helps college students log
 2. Read `Architecture.md` — confirm the stack, component design, and conventions
 3. Read `Resources.md` — check the component registry before creating anything new
 4. Check the Fix Log in `Project.md` for known errors related to your task
-5. If anything is unclear, ask before coding
+5. Create a new branch from `main` for each sprint — never build sprint work on a previous sprint's branch
+6. If anything is unclear, ask before coding
 
 ### While Building
 - Follow the project structure in `Tech.md` exactly — put files where they belong

@@ -15,6 +15,7 @@
 | Styling | Tailwind CSS 3.x | Utility-first, no context switching |
 | Database | Turso (hosted SQLite) via Prisma 5.x | SQLite-compatible, works on Vercel serverless |
 | Auth | Clerk | Hosted auth, Next.js middleware integration, no session management to write |
+| AI | Google Gemini Flash | Transcript analysis — free tier, sufficient for current scale |
 | Hosting | Vercel | Free tier, deploys on git push |
 | Package Manager | npm | — |
 
@@ -38,7 +39,8 @@ coffeetrack/
 ├── components/
 │   └── ChatForm.tsx            # Reusable chat create/edit form
 ├── lib/
-│   └── db.ts                   # Prisma client singleton
+│   ├── db.ts                   # Prisma client singleton
+│   └── gemini.ts               # Gemini client + analyzeTranscript helper (P-005)
 ├── middleware.ts               # Clerk route protection (added in P-004)
 ├── prisma/
 │   └── schema.prisma           # Data models
@@ -72,6 +74,8 @@ chatDate     DateTime
 notes        String    @default("")
 followUpDate DateTime?
 followUpDone Boolean   @default(false)
+transcript   String?   (added in P-005 — raw uploaded transcript text)
+aiAnalysis   String?   (added in P-005 — JSON blob of structured analysis)
 createdAt    DateTime  @default(now())
 updatedAt    DateTime  @updatedAt
 ```
@@ -102,6 +106,33 @@ Overdue = `followUpDate < today && followUpDone == false`.
 **Responsibilities:** Show total chats, chats per month (last 6 months), follow-up summary.
 
 **Data:** Server component; reads directly from Prisma. No client-side fetching.
+
+---
+
+### AI Analysis Module (implements P-005)
+
+**Responsibilities:** Accept a `.txt` transcript, call Gemini Flash, store structured analysis, display debrief on Chat Detail.
+
+**Key files:**
+- `lib/gemini.ts` — Gemini client singleton + `analyzeTranscript(transcript: string)` helper; returns typed `ChatAnalysis` object
+- `app/chats/actions.ts` — `uploadTranscript(id, formData)` server action; validates length, calls `analyzeTranscript`, writes `transcript` + `aiAnalysis` to DB
+- `components/TranscriptUpload.tsx` — client component; `.txt` file input, triggers server action
+- `components/AnalysisDisplay.tsx` — server component; parses `aiAnalysis` JSON, renders debrief UI
+- `app/chats/[id]/page.tsx` — wires both components into Chat Detail
+
+**`ChatAnalysis` type (stored as JSON in `aiAnalysis`):**
+```ts
+type ChatAnalysis = {
+  overallAssessment: string       // 2-3 sentence written summary
+  conversationBalance: string     // "good" | "talked_too_much" | "too_quiet"
+  questionQuality: string         // "surface" | "mixed" | "substantive"
+  nextStepEstablished: boolean
+  nextStep: string                // what the next step was, or "None identified"
+  keyLearnings: string[]          // bullet list of things learned about the person
+  coachingTips: string[]          // 2-3 actionable improvement tips
+  followUpDraft: string           // full draft follow-up message
+}
+```
 
 ---
 
@@ -151,6 +182,8 @@ Overdue = `followUpDate < today && followUpDone == false`.
 | 2026-03-31 | Auth | NextAuth, Auth.js, Clerk, Supabase Auth | Clerk | Hosted, Next.js 14 App Router native, no session management, free tier |
 | 2026-04-01 | DB environments | Single Turso DB for all environments | Two Turso DBs (`coffeetrack` prod, `coffeetrack-dev` local) | Prevents local dev/migrations from affecting production data |
 | 2026-04-01 | Pre-auth data migration | Seed userId, keep rows, or delete | Delete all existing rows when adding `userId` | Solo project with no real users; simpler than a backfill |
+| 2026-04-07 | AI analysis storage format | Individual DB columns vs. JSON blob | JSON blob (`aiAnalysis String?`) | Flexible for evolving analysis shape; pattern analysis (P-006) can parse JSON at query time |
+| 2026-04-07 | AI provider | OpenAI, Claude, Gemini | Gemini Flash | Free tier sufficient at current scale; swap is one-line change if needed |
 
 ---
 

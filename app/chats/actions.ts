@@ -1,6 +1,7 @@
 "use server"
 
 import { prisma } from "@/lib/db"
+import { analyzeTranscript } from "@/lib/gemini"
 import { z } from "zod"
 import { redirect } from "next/navigation"
 import { revalidatePath } from "next/cache"
@@ -107,6 +108,41 @@ export async function updateChat(id: number, _prevState: unknown, formData: Form
   revalidatePath("/chats")
   revalidatePath(`/chats/${id}`)
   redirect("/chats")
+}
+
+export async function uploadTranscript(id: number, _prevState: unknown, formData: FormData) {
+  const { userId } = auth()
+  if (!userId) return { error: "Unauthorized" }
+
+  const file = formData.get("transcript")
+  if (!(file instanceof File)) return { error: "No file provided" }
+  if (!file.name.endsWith(".txt")) return { error: "Only .txt files are supported" }
+
+  const text = await file.text()
+  if (text.trim().split(/\s+/).length < 100) {
+    return { error: "Transcript too short to analyze (minimum 100 words)" }
+  }
+
+  const chat = await prisma.coffeeChat.findUnique({ where: { id, userId } })
+  if (!chat) return { error: "Chat not found" }
+
+  let analysis
+  try {
+    analysis = await analyzeTranscript(text)
+  } catch {
+    return { error: "Analysis failed — please try again" }
+  }
+
+  await prisma.coffeeChat.update({
+    where: { id, userId },
+    data: {
+      transcript: text,
+      aiAnalysis: JSON.stringify(analysis),
+    },
+  })
+
+  revalidatePath(`/chats/${id}`)
+  return { success: true }
 }
 
 export async function deleteChat(id: number) {

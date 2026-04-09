@@ -22,7 +22,10 @@
 | ChatForm | Component | `components/ChatForm.tsx` | Reusable create/edit form with Zod validation (P-001) |
 | Prisma Client | Database | `lib/db.ts` | Singleton client for Turso via libsql adapter |
 | Auth Middleware | Middleware | `middleware.ts` | Clerk route protection — added in P-004 |
-| CoffeeChat Model | Data Model | `prisma/schema.prisma` | Core DB model — gains `userId` in P-004 |
+| CoffeeChat Model | Data Model | `prisma/schema.prisma` | Core DB model — gains `userId` in P-004; `transcript` + `aiAnalysis` in P-005 |
+| Gemini Client | Lib | `lib/gemini.ts` | Gemini Flash client + `analyzeTranscript()` helper (P-005) |
+| TranscriptUpload | Component | `components/TranscriptUpload.tsx` | Client component — `.txt` file input, triggers analyzeTranscript action (P-005) |
+| AnalysisDisplay | Component | `components/AnalysisDisplay.tsx` | Server component — renders parsed `aiAnalysis` JSON as debrief UI (P-005) |
 
 ---
 
@@ -36,6 +39,9 @@
 | All Server Actions | Clerk `auth()` | import (P-004) | Extract userId for query scoping |
 | Prisma Client | Turso DB | libsql HTTP | Hosted SQLite queries |
 | Next.js | Clerk Middleware | `middleware.ts` | Protect all routes |
+| TranscriptUpload | Chat Actions (`uploadTranscript`) | Server Action import | Send transcript for analysis (P-005) |
+| Chat Actions (`uploadTranscript`) | Gemini Client | import | Call Gemini Flash API (P-005) |
+| AnalysisDisplay | CoffeeChat DB record | Prisma (via page) | Read stored `aiAnalysis` JSON (P-005) |
 
 ---
 
@@ -56,6 +62,7 @@
 | Database (prod) | Turso | `coffeetrack` — production hosted SQLite | Free tier |
 | Database (dev) | Turso | `coffeetrack-dev` — local development SQLite | Free tier |
 | Auth | Clerk | Sign-up, sign-in, session management | Free tier (up to 10k MAU) |
+| AI | Google Gemini Flash | Transcript analysis | Free tier (15 req/min, 1M tokens/day) |
 
 ---
 
@@ -73,6 +80,7 @@
 | `@prisma/adapter-libsql` | Prisma adapter for libSQL | latest |
 | `zod` | Input validation | 3.x |
 | `@clerk/nextjs` | Auth (sign-up, sign-in, middleware) | latest — added in P-004 |
+| `@google/generative-ai` | Gemini Flash API client | latest — added in P-005 |
 
 ---
 
@@ -84,3 +92,4 @@
 | `TURSO_AUTH_TOKEN` | Vercel env vars (prod token) + `.env.local` (dev token) | Prisma client |
 | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Vercel env vars + `.env.local` | Clerk frontend (P-004) |
 | `CLERK_SECRET_KEY` | Vercel env vars + `.env.local` | Clerk server-side (P-004) |
+| `GEMINI_API_KEY` | Vercel env vars + `.env.local` | Gemini Flash API (P-005) |
