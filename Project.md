@@ -76,17 +76,17 @@
 | Build `TranscriptUpload` component | Soham | P-005-F01 | `feat/ai-analysis` | Done | `.txt` only, client component |
 | Build `AnalysisDisplay` component | Soham | P-005-F04/F05 | `feat/ai-analysis` | Done | Hidden if no analysis; renders all 7 fields |
 | Wire both components into Chat Detail page | Soham | P-005-F04/F06 | `feat/ai-analysis` | Done | |
-| Add `GROQ_API_KEY` to Vercel env vars | Soham | — | — | Todo | |
-| Pre-deploy checks (tsc, lint, build) + migrate prod Turso DB | Soham | — | — | Todo | Prod DB needs `transcript` + `aiAnalysis` columns |
-| Deploy v2.1 | Soham | — | — | Todo | |
+| Add `GROQ_API_KEY` to Vercel env vars | Soham | — | — | Done | |
+| Pre-deploy checks (tsc, lint, build) + migrate prod Turso DB | Soham | — | — | Done | |
+| Deploy v2.1 | Soham | — | — | Done | |
 
 ### Sprint 3 Review
 
-- **Completed:** —
-- **Carried over:** —
-- **What went well:** —
-- **What didn't:** —
-- **Changes for next sprint:** —
+- **Completed:** 10/10
+- **Carried over:** None
+- **What went well:** Full AI analysis pipeline shipped; Groq free tier worked cleanly once JSON extraction was fixed
+- **What didn't:** Gemini free tier unusable (limit: 0); Groq JSON mode unreliable — required manual JSON extraction from response
+- **Changes for next sprint:** Start on a new branch from main
 
 ---
 
@@ -110,9 +110,9 @@
 
 | Check | Command | Last Result | Date |
 |-------|---------|-------------|------|
-| Type check | `npx tsc --noEmit` | Pass | 2026-04-07 |
-| Lint | `npm run lint` | Pass | 2026-04-07 |
-| Build | `npm run build` | Pass | 2026-04-07 |
+| Type check | `npx tsc --noEmit` | Pass | 2026-04-08 |
+| Lint | `npm run lint` | Pass | 2026-04-08 |
+| Build | `npm run build` | Pass | 2026-04-08 |
 
 ---
 
@@ -137,6 +137,7 @@
 |------|---------|-------------|--------|-------|
 | 2026-03-30 | v1.0 | Production | Live | Initial deployment — all P-001, P-002, P-003 complete |
 | 2026-04-07 | v2.0 | Production | Live | Auth via Clerk (P-004) — all routes protected, userId scoping live |
+| 2026-04-08 | v2.1 | Production | Live | AI chat analysis (P-005) — transcript upload + Groq/Llama coaching debrief |
 
 ---
 
