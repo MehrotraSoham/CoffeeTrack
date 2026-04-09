@@ -19,7 +19,7 @@ CoffeeTrack helps college students and MBAs stay on top of their networking by l
 | P-002 | Track follow-ups / reminders | Done | Must Have |
 | P-003 | Dashboard & stats | Done | Should Have |
 | P-004 | Authentication (Clerk) | Done | Must Have |
-| P-005 | AI Chat Analysis | Defined | Must Have |
+| P-005 | AI Chat Analysis | Done | Must Have |
 
 > Status: Todo → Defining → Defined → Building → Done
 > Priority: Must Have / Should Have / Nice to Have
